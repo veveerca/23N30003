@@ -63,6 +63,170 @@
             </button>
         </div>
     </div>
-    <script src="script.js"></script>
+
+
+    <script>
+                // --- DATA KUIS ---
+        const quizData = [
+            {
+                question: "Apa satu-satunya mamalia yang bisa terbang?",
+                options: ["Tupai Terbang", "Kelelawar", "Burung Hantu", "Pterodactyl"],
+                correctAnswer: "Kelelawar",
+                funFact: "Meskipun 'tupai terbang' memiliki nama itu, mereka sebenarnya meluncur (glide), bukan terbang secara aktif seperti kelelawar."
+            },
+            {
+                question: "Planet manakah di tata surya kita yang terkenal dengan 'Cincin'-nya?",
+                options: ["Jupiter", "Mars", "Saturnus", "Neptunus"],
+                correctAnswer: "Saturnus",
+                funFact: "Tahukah kamu? Jupiter, Uranus, dan Neptunus sebenarnya juga memiliki cincin, tetapi cincin Saturnus adalah yang paling besar dan terlihat jelas."
+            },
+            {
+                question: "Apa ibukota dari Australia?",
+                options: ["Sydney", "Melbourne", "Canberra", "Brisbane"],
+                correctAnswer: "Canberra",
+                funFact: "Canberra dipilih sebagai ibukota kompromi pada tahun 1908 karena Sydney dan Melbourne (dua kota terbesar) bersaing untuk menjadi ibukota."
+            },
+            {
+                question: "Berapa banyak hati yang dimiliki oleh seekor gurita?",
+                options: ["Satu", "Dua", "Tiga", "Empat"],
+                correctAnswer: "Tiga",
+                funFact: "Gurita memiliki tiga hati. Dua hati memompa darah ke insang, sementara hati ketiga memompa darah ke seluruh tubuh."
+            },
+            {
+                question: "Gunung tertinggi di dunia adalah...",
+                options: ["K2", "Gunung Everest", "Kangchenjunga", "Makalu"],
+                correctAnswer: "Gunung Everest",
+                funFact: "Meskipun Everest adalah yang tertinggi di atas permukaan laut, Mauna Kea di Hawaii sebenarnya 'lebih tinggi' jika diukur dari dasarnya di dasar laut."
+            }
+        ];
+
+        // --- ELEMEN DOM ---
+        const startScreen = document.getElementById('start-screen');
+        const quizScreen = document.getElementById('quiz-screen');
+        const endScreen = document.getElementById('end-screen');
+        
+        const startButton = document.getElementById('start-button');
+        const nextButton = document.getElementById('next-button');
+        const restartButton = document.getElementById('restart-button');
+        
+        const questionText = document.getElementById('question-text');
+        const optionsContainer = document.getElementById('options-container');
+        const feedbackContainer = document.getElementById('feedback-container');
+        const feedbackText = document.getElementById('feedback-text');
+        const funFactText = document.getElementById('fun-fact-text');
+        
+        const scoreDisplay = document.getElementById('score');
+        const finalScoreDisplay = document.getElementById('final-score');
+        const questionNumberDisplay = document.getElementById('question-number');
+        const totalQuestionsDisplay = document.getElementById('total-questions');
+        
+        // --- STATE KUIS ---
+        let currentQuestionIndex = 0;
+        let score = 0;
+
+        // --- FUNGSI-FUNGSI ---
+
+        // Memulai Kuis
+        function startQuiz() {
+            startScreen.classList.add('hidden');
+            endScreen.classList.add('hidden');
+            quizScreen.classList.remove('hidden');
+            
+            currentQuestionIndex = 0;
+            score = 0;
+            scoreDisplay.textContent = score;
+            totalQuestionsDisplay.textContent = quizData.length;
+            
+            showQuestion();
+        }
+
+        // Menampilkan Pertanyaan
+        function showQuestion() {
+            // Reset feedback
+            feedbackContainer.classList.add('hidden');
+            nextButton.classList.add('hidden');
+            optionsContainer.innerHTML = ''; // Kosongkan pilihan lama
+
+            // Muat data soal
+            const questionData = quizData[currentQuestionIndex];
+            questionText.textContent = questionData.question;
+            questionNumberDisplay.textContent = currentQuestionIndex + 1;
+
+            // Buat tombol pilihangit 
+            questionData.options.forEach(option => {
+                const button = document.createElement('button');
+                button.textContent = option;
+                button.classList.add(
+                    'w-full', 'bg-slate-700', 'hover:bg-slate-600', 'text-white', 
+                    'text-md', 'font-semibold', 'py-3', 'px-5', 'rounded-lg', 
+                    'transition-all', 'duration-200', 'text-left'
+                );
+                button.addEventListener('click', () => selectAnswer(option, button));
+                optionsContainer.appendChild(button);
+            });
+        }
+
+        // Saat Jawaban Dipilih
+        function selectAnswer(selectedOption, selectedButton) {
+            const correctAnwer = quizData[currentQuestionIndex].correctAnswer;
+            const isCorrect = (selectedOption === correctAnwer);
+
+            // Nonaktifkan semua tombol pilihan
+            Array.from(optionsContainer.children).forEach(button => {
+                button.disabled = true;
+                // Tampilkan jawaban benar dan salah
+                if (button.textContent === correctAnwer) {
+                    button.classList.remove('bg-slate-700', 'hover:bg-slate-600');
+                    button.classList.add('bg-green-500', 'text-white');
+                } else if (button === selectedButton) {
+                    button.classList.remove('bg-slate-700', 'hover:bg-slate-600');
+                    button.classList.add('bg-red-500', 'text-white');
+                }
+            });
+
+            // Tampilkan feedback
+            if (isCorrect) {
+                score++;
+                scoreDisplay.textContent = score;
+                feedbackText.textContent = "Benar!";
+                feedbackText.classList.remove('text-red-400');
+                feedbackText.classList.add('text-green-400');
+            } else {
+                // Kasus jawaban salah
+                feedbackText.textContent = "Salah!";
+                feedbackText.classList.remove('text-green-400');
+                feedbackText.classList.add('text-red-400');
+            }
+
+            // Tampilkan fun fact
+            funFactText.textContent = quizData[currentQuestionIndex].funFact;
+            feedbackContainer.classList.remove('hidden');
+            
+            // Tampilkan tombol Lanjut
+            nextButton.classList.remove('hidden');
+        }
+
+        // Menampilkan Soal Berikutnya atau Hasil
+        function handleNext() {
+            currentQuestionIndex++;
+            if (currentQuestionIndex < quizData.length) {
+                showQuestion();
+            } else {
+                showResults();
+            }
+        }
+
+        // Menampilkan Layar Selesai
+        function showResults() {
+            quizScreen.classList.add('hidden');
+            endScreen.classList.remove('hidden');
+            finalScoreDisplay.textContent = `${score} dari ${quizData.length}`;
+        }
+
+        // --- EVENT LISTENERS ---
+        startButton.addEventListener('click', startQuiz);
+        nextButton.addEventListener('click', handleNext);
+        restartButton.addEventListener('click', startQuiz); // Restart memanggil fungsi startQuiz lagi
+    </script>
 </body>
 </html>
