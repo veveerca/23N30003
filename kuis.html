@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kuis Pengetahuan Umum Interaktif</title>
+    <!-- Memuat Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Menggunakan font Inter */
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+    </style>
+</head>
+<body class="bg-slate-900 text-white min-h-screen flex items-center justify-center p-4">
+
+    <div class="container max-w-2xl w-full mx-auto">
+
+        <!-- 1. Layar Mulai -->
+        <div id="start-screen" class="text-center p-8 bg-slate-800 rounded-2xl shadow-2xl">
+            <h1 class="text-4xl font-bold mb-4 text-cyan-400">Kuis Pengetahuan Umum!</h1>
+            <p class="text-lg text-slate-300 mb-8">Uji pengetahuanmu dengan kuis singkat ini.</p>
+            <button id="start-button" class="w-full bg-cyan-500 hover:bg-cyan-600 text-white text-lg font-bold py-3 px-6 rounded-lg shadow-lg transition-transform transform hover:scale-105">
+                Mulai Kuis
+            </button>
+        </div>
+
+        <!-- 2. Layar Kuis -->
+        <div id="quiz-screen" class="hidden p-8 bg-slate-800 rounded-2xl shadow-2xl">
+            <!-- Header: Skor dan Nomor Soal -->
+            <div class="flex justify-between items-center mb-6">
+                <div class="text-lg">Soal <span id="question-number">1</span> dari <span id="total-questions">5</span></div>
+                <div class="text-xl font-bold text-cyan-400">Skor: <span id="score">0</span></div>
+            </div>
+
+            <!-- Pertanyaan -->
+            <h2 id="question-text" class="text-2xl font-semibold mb-6 min-h-[100px]">Memuat pertanyaan...</h2>
+
+            <!-- Pilihan Jawaban -->
+            <div id="options-container" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <!-- Tombol pilihan dimasukkan oleh JS -->
+            </div>
+
+            <!-- Feedback -->
+            <div id="feedback-container" class="mt-6 p-4 bg-slate-700 rounded-lg hidden">
+                <h3 id="feedback-text" class="text-xl font-bold mb-2"></h3>
+                <p id="fun-fact-text" class="text-slate-300"></p>
+            </div>
+
+            <!-- Tombol Lanjut -->
+            <button id="next-button" class="w-full bg-cyan-500 hover:bg-cyan-600 text-white text-lg font-bold py-3 px-6 rounded-lg shadow-lg transition-transform transform hover:scale-105 mt-6 hidden">
+                Lanjut
+            </button>
+        </div>
+
+        <!-- 3. Layar Selesai -->
+        <div id="end-screen" class="hidden text-center p-8 bg-slate-800 rounded-2xl shadow-2xl">
+            <h1 class="text-4xl font-bold mb-4 text-cyan-400">Kuis Selesai!</h1>
+            <p class="text-2xl text-slate-300 mb-8">Skor Akhir Kamu: <span id="final-score" class="font-bold">0</span></p>
+            <button id="restart-button" class="w-full bg-cyan-500 hover:bg-cyan-600 text-white text-lg font-bold py-3 px-6 rounded-lg shadow-lg transition-transform transform hover:scale-105">
+                Coba Lagi
+            </button>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
